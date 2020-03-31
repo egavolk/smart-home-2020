@@ -13,34 +13,48 @@ public class HallDoorClosedEventHandler implements SensorEventHandler {
 
     @Override
     public void handle(SensorEvent event) {
-        if (isHallDoorClosed(event)) {
-            turnOffAllLights();
-        }
+        if (!isDoorClosed(event))
+            return;
+
+        smartHome.execute(obj -> {
+            if (!(obj instanceof Room))
+                return;
+            Room room = (Room) obj;
+
+            if (!(room.getName().equals("hall")))
+                return;
+
+            room.execute(inner_obj -> {
+                if (!(inner_obj instanceof Door))
+                    return;
+                Door door = (Door) inner_obj;
+
+                if (!(door.getId().equals(event.getObjectId())))
+                    return;
+
+                turnOffAllLights();
+            });
+        });
     }
 
-    private boolean isHallDoorClosed(SensorEvent event) {
-        Room room = findRoomByDoorId(event.getObjectId());
-        return room != null && room.getName().equals("hall") &&
-               event.getType() == SensorEventType.DOOR_CLOSED;
-    }
-
-    private Room findRoomByDoorId(String id) {
-        for (Room room : smartHome.getRooms()) {
-            for (Door door : room.getDoors()) {
-                if (door.getId().equals(id))
-                    return room;
-            }
-        }
-        return null;
+    private boolean isDoorClosed(SensorEvent event) {
+        return event.getType() == SensorEventType.DOOR_CLOSED;
     }
 
     private void turnOffAllLights() {
-        for (Room room : smartHome.getRooms()) {
-            for (Light light : room.getLights()) {
+        smartHome.execute(obj -> {
+            if (!(obj instanceof Room))
+                return;
+            Room room = (Room) obj;
+
+            room.execute(inner_obj -> {
+                if (!(inner_obj instanceof Light))
+                    return;
+                Light light = (Light) inner_obj;
                 turnOffLight(light);
                 logLightState(room, light);
-            }
-        }
+            });
+        });
     }
 
     private void logLightState(Room room, Light light) {
