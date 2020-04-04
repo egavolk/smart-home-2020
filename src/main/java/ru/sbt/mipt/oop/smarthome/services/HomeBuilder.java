@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class HomeBuilder {
 
     public static void main(String[] args) throws IOException {
-        runHomeBuilder(new SmartHomeJsonWriter("output.js"));
+        runHomeBuilder(new SmartHomeJsonWriter("smart-home-1.json"));
     }
 
     private static void runHomeBuilder(SmartHomeWriter writer) {

@@ -26,6 +26,8 @@ public class SmartHomeJsonWriter implements SmartHomeWriter {
         try {
             BufferedWriter writer = Files.newBufferedWriter(path);
             writer.write(jsonString);
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             throw new RuntimeException("Could not read SmartHome from " + name, e);
         }
