@@ -1,19 +1,17 @@
 package ru.sbt.mipt.oop.smarthome.remotecontrol;
 
-import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class RemoteControllerTest {
     private int value = 0;
-    private RemoteController rc = new RemoteController();
-
-    @Before
-    public void setUp() {
-        rc.setCommand("A", () -> {value = 1;});
-        rc.setCommand("1", () -> {value = 2;});
-    }
+    private RemoteController rc = new RemoteController(Map.ofEntries(
+            Map.entry("A", () -> {value = 1;}),
+            Map.entry("1", () -> {value = 2;})
+    ));
 
     @Test
     public void testButtonPressed() {

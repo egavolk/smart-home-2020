@@ -72,7 +72,7 @@ public class AlarmTest {
     public void alertWhenDeactivated() {
         alarm.setState(new AlarmDeactivatedState(alarm));
         alarm.alert();
-        assertTrue(alarm.getState() instanceof AlarmDeactivatedState);
+        assertTrue(alarm.getState() instanceof AlarmAlertedState);
     }
 
     @Test
