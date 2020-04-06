@@ -16,6 +16,8 @@ public class RemoteController implements rc.RemoteControl {
 
     @Override
     public void onButtonPressed(String buttonCode, String rcId) {
-        commandMap.get(buttonCode).execute();
+        if (commandMap.containsKey(buttonCode)) {
+            commandMap.get(buttonCode).execute();
+        }
     }
 }
